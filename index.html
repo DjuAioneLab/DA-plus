@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>지도1</title>
+    <title>지도</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
     <script type="text/javascript" src="https://rawgit.com/jawj/OverlappingMarkerSpiderfier-Leaflet/master/oms.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/googlemaps/v3-utility-library/29a5d7a0/markerclustererplus/src/markerclusterer.js"></script>
     <style>
         #map {
             width: 100%;
@@ -25,14 +26,14 @@
         var map = new naver.maps.Map('map', mapOptions);
         var markers = [];
 
-        // 사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
+
         function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     map.setCenter(userLatLng);
 
-                    // 사용자 위치 주변에 마커 생성
+
                     var userMarkerOptions = {
                         position: userLatLng,
                         map: map,
@@ -44,7 +45,7 @@
                     var userMarker = new naver.maps.Marker(userMarkerOptions);
                     markers.push(userMarker);
 
-                    // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
+   
                     loadCSV('대피소.csv', function(data) {
                         var lines = data.split('\n');
 
@@ -65,13 +66,9 @@
                             markers.push(marker);
                         }
 
-                        var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
 
-                        var clusterer = new MarkerClusterer({
-                            map: map,
-                            markers: markers,
-                            disableClickZoom: true,
-                            gridSize: 100,
+                        var clusterOptions = {
+                            gridSize: 50,
                             minClusterSize: 2,
                             styles: [{
                                 width: 36,
@@ -81,7 +78,10 @@
                                 textColor: '#fff',
                                 anchorText: [0, 0]
                             }]
-                        });
+                        };
+                        var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
+
+                        var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
 
                         for (var i = 0; i < markers.length; i++) {
                             oms.addMarker(markers[i]);
@@ -91,7 +91,7 @@
             }
         }
 
-        // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
+
         function loadCSV(url, callback) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
@@ -103,7 +103,7 @@
             xhr.send();
         }
 
-        // setMapCenterToUserLocation 함수를 호출하여 사용자 위치로 지도 중심 설정과 마커 표시
+
         setMapCenterToUserLocation();
     </script>
 </body>
