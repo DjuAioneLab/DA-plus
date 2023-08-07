@@ -1,49 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>지도</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.20.1/ol.css" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.20.1/ol.js"></script>
+  <meta charset="utf-8">
+  <title>다음 지도 API</title>
 </head>
 <body>
-    <div id="vmap" style="width: 100%; height: 500px;"></div>
+  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx&libraries=clusterer" charset="utf-8"></script>
+  <div id="map" style="width:100%;height:100vh;"></div>
+  <script>
+    var mapDiv = document.getElementById('map');
+    var map = new naver.maps.Map(mapDiv);
 
-    <script>
-        var param = {
-            name: '하천범람지도(지방하천)',
-            serverUrl: 'http://www.safemap.go.kr/openApiService/wms/getLayerData.do?apikey=XT02BTNQ-XT02-XT02-XT02-XT02BTNQN9',
-            layername: 'A2SM_FLOODFOVRRISK2',
-            styles: ''
-        };
 
-        var wmsLayer = new ol.layer.Image({
-            source: new ol.source.ImageWMS({
-                url: param.serverUrl,
-                params: {
-                    'LAYERS': param.layername,
-                    'FORMAT': 'image/png',
-                    'TRANSPARENT': true
-                },
-                ratio: 1,
-                serverType: 'geoserver'
-            }),
-            visible: true
+      var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+          mapOption = {
+              center: new naver.maps.LatLng(37.56682, 126.97865), // 지도의 중심좌표
+              level: 3, // 지도의 확대 레벨
+              mapTypeId : naver.maps.MapTypeId.ROADMAP // 지도종류
+          }; 
+
+
+      // 지도를 생성한다 
+      var map = new naver.maps.Map(mapContainer, mapOption); 
+
+        var clusterer = new naver.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+        minLevel: 10 // 클러스터 할 최소 지도 레벨 
+    });
+
+        var 데이터 = [
+            [37.5395, 126.98337, '<div style="padding:5px;">대전대학교 운동장</div>'],
+            [36.3299, 127.4554,  '<div style="padding:5px;">대룡초등학교 운동장</div>']
+            ]
+        
+        var markers = [];
+         for  (var i=0; i<데이터.length; i++)
+         {
+        // 지도에 마커를 생성하고 표시한다
+        var marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(데이터[i][0],데이터[i][1]),
+            map: map
         });
+        
+        var iwContent = '<div style="padding:5px;">대전대학교 운동장</div>';
+        iwPosition = new naver.maps.LatLng(데이터[i][0],데이터[i][1]); //인포윈도우 표시 위치입니다
 
-        var map = new ol.Map({
-            target: 'vmap',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM()
-                }),
-                wmsLayer
-            ],
-            view: new ol.View({
-                center: ol.proj.fromLonLat([126.9784, 37.5665]),
-                zoom: 12
-            })
+        // 인포윈도우를 생성합니다
+        var infowindow = new naver.maps.InfoWindow({
+        content : 데이터[i][2] 
         });
-    </script>
+  
+        // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+        infowindow.open(map, marker); 
+        markers.push(marker);
+        naver.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+        naver.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+       
 
-</body>
-</html>
+clusterer.addMarkers(markers);
+// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+function makeOverListener(map, marker, infowindow) {
+    return function() {
+        infowindow.open(map, marker);
+    };
+}
+
+// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+function makeOutListener(infowindow) {
+    infowindow.close()
