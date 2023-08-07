@@ -23,8 +23,75 @@
         };
 
         var map = new naver.maps.Map('map', mapOptions);
+        var markers = [];
 
+        // 사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
+        function setMapCenterToUserLocation() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(userLatLng);
 
+                    // 사용자 위치 주변에 마커 생성
+                    var userMarkerOptions = {
+                        position: userLatLng,
+                        map: map,
+                        icon: {
+                            content: '<div style="font-weight: bold;">내 위치</div>',
+                            anchor: new naver.maps.Point(12, 24)
+                        }
+                    };
+                    var userMarker = new naver.maps.Marker(userMarkerOptions);
+                    markers.push(userMarker);
+
+                    // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
+                    loadCSV('대피소.csv', function(data) {
+                        var lines = data.split('\n');
+
+                        for (var i = 1; i < lines.length; i++) {
+                            var values = lines[i].split(',');
+                            var 위치명 = values[0];
+                            var 위도 = parseFloat(values[1]);
+                            var 경도 = parseFloat(values[2]);
+                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
+
+                            var markerOptions = {
+                                position: locationLatLng,
+                                map: map,
+                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
+                            };
+
+                            var marker = new naver.maps.Marker(markerOptions);
+                            markers.push(marker);
+                        }
+
+                        var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
+
+                        var clusterer = new MarkerClusterer({
+                            map: map,
+                            markers: markers,
+                            disableClickZoom: true,
+                            gridSize: 100,
+                            minClusterSize: 2,
+                            styles: [{
+                                width: 36,
+                                height: 36,
+                                anchorIcon: [18, 36],
+                                textSize: 12,
+                                textColor: '#fff',
+                                anchorText: [0, 0]
+                            }]
+                        });
+
+                        for (var i = 0; i < markers.length; i++) {
+                            oms.addMarker(markers[i]);
+                        }
+                    });
+                });
+            }
+        }
+
+        // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
         function loadCSV(url, callback) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
@@ -36,54 +103,8 @@
             xhr.send();
         }
 
-
-        function parseCSVAndCreateMarkers(data) {
-            var lines = data.split('\n');
-            var markers = [];
-
-            for (var i = 1; i < lines.length; i++) {
-                var values = lines[i].split(',');
-                var 위치명 = values[0];
-                var 위도 = parseFloat(values[1]);
-                var 경도 = parseFloat(values[2]);
-
-                var latlng = new naver.maps.LatLng(위도, 경도);
-
-                var markerOptions = {
-                    position: latlng,
-                    map: map,
-                    content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                };
-
-                var marker = new naver.maps.Marker(markerOptions);
-                markers.push(marker);
-            }
-
-            var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
-
-            var clusterer = new MarkerClusterer({
-                map: map,
-                markers: markers,
-                disableClickZoom: true,
-                gridSize: 100,
-                minClusterSize: 2,
-                styles: [{
-                    width: 36,
-                    height: 36,
-                    anchorIcon: [18, 36],
-                    textSize: 12,
-                    textColor: '#fff',
-                    anchorText: [0, 0]
-                }]
-            });
-
-            for (var i = 0; i < markers.length; i++) {
-                oms.addMarker(markers[i]);
-            }
-        }
-
-
-        loadCSV('대피소.csv', parseCSVAndCreateMarkers);
+        // setMapCenterToUserLocation 함수를 호출하여 사용자 위치로 지도 중심 설정과 마커 표시
+        setMapCenterToUserLocation();
     </script>
 </body>
 </html>
