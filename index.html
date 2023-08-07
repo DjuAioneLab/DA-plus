@@ -5,11 +5,10 @@
     <title>지도</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
     <script type="text/javascript" src="https://rawgit.com/jawj/OverlappingMarkerSpiderfier-Leaflet/master/oms.min.js"></script>
-
     <style>
         #map {
-            width: 600px;
-            height: 400px;
+            width: 100%;
+            height: 100vh; /* 화면 높이에 맞게 조절 */
         }
     </style>
 </head>
@@ -28,6 +27,7 @@
         var 데이터 = [
             [37.5395, 126.98337, '<div style="padding:5px;">대전대학교 운동장</div>'],
             [36.3299, 127.4554,  '<div style="padding:5px;">대룡초등학교 운동장</div>']
+        ];
 
         var markers = [];
         for (var i = 0; i < 데이터.length; i++) {
