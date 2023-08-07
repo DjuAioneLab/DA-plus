@@ -224,6 +224,35 @@
             <p>&copy; 2023. MIRAEJIGI. All rights reserved.</p>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+<script>
+    var param = {
+        name: '하천범람지도(지방하천)',
+        serverUrl: 'http://www.safemap.go.kr/openApiService/wms/getLayerData.do?apikey=[APIKEY]', // APIKEY를 실제 키로 변경해야 합니다.
+        layername: 'A2SM_FLOODFOVRRISK2',
+        styles: ''
+    };
+    
+    var wmsLayer = new OpenLayers.Layer.WMS(
+        param.name,
+        param.serverUrl,
+        {
+            layers: '' + param.layername,
+            styles: param.styles,
+            format: 'image/png',
+            exceptions: 'text/xml',
+            transparent: true
+        },
+        {
+            isBaseLayer: false
+        }
+    );
+
+    // 지도 설정 및 레이어 추가
+    var map = new OpenLayers.Map("map");
+    map.addLayer(wmsLayer);
+    map.zoomToMaxExtent();
+</script>
 
   <script>
         /* 랜덤 배너 */
