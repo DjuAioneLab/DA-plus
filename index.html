@@ -1,35 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenLayers Map Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/3.20.1/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/3.20.1/ol.js"></script>
+</head>
+<body>
+    <div id="vmap" style="width: 100%; height: 500px;"></div>
 
-<title>123</title>
+    <script>
+param = {
+ name:'하천범람지도(지방하천)',
+ serverUrl:'www.safemap.go.kr/openApiService/wms/getLayerData.do?apikey=XT02BTNQ-XT02-XT02-XT02-XT02BTNQN9',
+ layername:'A2SM_FLOODFOVRRISK2',
+ styles:''
+};
+var wmsLayer = new OpenLayers.Layer.WMS (
+ param.name,
+ param.serverUrl,
+ {
+  layers: ''+param.layername,
+  styles:param.styles,
+  format: 'image/png',
+  exceptions:'text/xml',
+  transparent: true
+ },
+ {
+  isBaseLayer: false
+ }
+);
 
-
-<div id="map" style="width: 100%; height: 500px;"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
-<script>
-    var param = {
-        name: '하천범람지도(지방하천)',
-        serverUrl: 'http://www.safemap.go.kr/openApiService/wms/getLayerData.do?apikey=[XT02BTNQ-XT02-XT02-XT02-XT02BTNQN9]', // APIKEY를 실제 키로 변경해야 합니다.
-        layername: 'A2SM_FLOODFOVRRISK2',
-        styles: ''
-    };
-    
-    var wmsLayer = new OpenLayers.Layer.WMS(
-        param.name,
-        param.serverUrl,
-        {
-            layers: '' + param.layername,
-            styles: param.styles,
-            format: 'image/png',
-            exceptions: 'text/xml',
-            transparent: true
-        },
-        {
-            isBaseLayer: false
-        }
-    );
-
-    // 지도 설정 및 레이어 추가
-    var map = new OpenLayers.Map("map");
-    map.addLayer(wmsLayer);
-    map.zoomToMaxExtent();
-</script>
+    </script>
+</body>
+</html>
