@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>[지진]</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
-    <script src="/MarkerClustering.js"></script>
     <script src="https://navermaps.github.io/maps.js.ncp/docs/js/libs/markerclusterer.js"></script>
     <script type="text/javascript" src="https://rawgit.com/jawj/OverlappingMarkerSpiderfier-Leaflet/master/oms.min.js"></script>
     <style>
@@ -57,7 +56,7 @@
                     markers.push(userMarker);
 
                     // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
-                    loadCSV('./eqk1.csv', function(data) {
+                    loadCSV('eqk1.csv', function(data) {
                         var lines = data.split('\n');
 
                         for (var i = 1; i < lines.length; i++) {
@@ -79,7 +78,22 @@
 
                         var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
 
-                    
+                        var clusterer = new MarkerClusterer({
+                            map: map,
+                            markers: markers,
+                            disableClickZoom: true,
+                            gridSize: 100,
+                            minClusterSize: 2,
+                            styles: [{
+                                width: 36,
+                                height: 36,
+                                anchorIcon: [18, 36],
+                                textSize: 12,
+                                textColor: '#fff',
+                                anchorText: [0, 0]
+                            }]
+                        });
+
                         for (var i = 0; i < markers.length; i++) {
                             oms.addMarker(markers[i]);
                         }
