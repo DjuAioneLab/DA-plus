@@ -55,7 +55,7 @@
                     markers.push(userMarker);
 
                     // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
-                    loadCSV('eqk1.csv', function(data) {
+                    loadCSV('./eqk1.csv', function(data) {
                         var lines = data.split('\n');
 
                         for (var i = 1; i < lines.length; i++) {
