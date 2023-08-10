@@ -76,24 +76,24 @@ fetch('./eqk1.csv')
 
                     // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
                     loadCSV('대피소.csv', function(data) {
-                        var lines = data.split('\n');
+    var lines = data.split('\n');
 
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(',');
-                            var 위치명 = values[0];
-                            var 위도 = parseFloat(values[1]);
-                            var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
+    for (var i = 1; i < lines.length; i++) {
+        var values = lines[i].split(',');
+        var 위치명 = values[0];
+        var 위도 = parseFloat(values[1]);
+        var 경도 = parseFloat(values[2]);
+        var locationLatLng = new naver.maps.LatLng(위도, 경도);
 
-                            var markerOptions = {
-                                position: locationLatLng,
-                                map: map,
-                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                            };
+        var markerOptions = {
+            position: locationLatLng,
+            map: map,
+            content: '<div style="padding:5px;">' + 위치명 + '</div>'
+        };
 
-                            var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
-                        }
+        var marker = new naver.maps.Marker(markerOptions);
+        markers.push(marker);
+    }
 
                         var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
 
