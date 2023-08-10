@@ -5,33 +5,6 @@
     <title>지도1</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
     <script type="text/javascript" src="https://rawgit.com/jawj/OverlappingMarkerSpiderfier-Leaflet/master/oms.min.js"></script>
-    <script>
-            function showPosition(position) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
-
-      var mapOptions = {
-        center: new naver.maps.LatLng(latitude, longitude),
-        zoom: 17
-      };
-      map = new naver.maps.Map(document.getElementById("map"), mapOptions);
-
-// 현재 위치 마커 추가
-showCurrentLocationMarker(latitude, longitude);
-
-// 현재 주소 가져오기
-getCurrentAddress(latitude, longitude);
-
-// CSV 파일 로드
-fetch('./HeatWaveShelter.csv')
-  .then(response => response.text())
-  .then(data => {
-    markers = parseCSVData(data);
-    displayMarkers(markers);
-  })
-  .catch(error => console.error('Error:', error));
-}
-    </script>
     <style>
         #map {
             width: 100%;
@@ -73,6 +46,33 @@ fetch('./HeatWaveShelter.csv')
                     };
                     var userMarker = new naver.maps.Marker(userMarkerOptions);
                     markers.push(userMarker);
+
+                    
+            function showPosition(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+
+      var mapOptions = {
+        center: new naver.maps.LatLng(latitude, longitude),
+        zoom: 17
+      };
+      map = new naver.maps.Map(document.getElementById("map"), mapOptions);
+
+// 현재 위치 마커 추가
+showCurrentLocationMarker(latitude, longitude);
+
+// 현재 주소 가져오기
+getCurrentAddress(latitude, longitude);
+
+// CSV 파일 로드
+fetch('./HeatWaveShelter.csv')
+  .then(response => response.text())
+  .then(data => {
+    markers = parseCSVData(data);
+    displayMarkers(markers);
+  })
+  .catch(error => console.error('Error:', error));
+}
 
                     // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
                     loadCSV('대피소.csv', function(data) {
