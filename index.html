@@ -210,7 +210,7 @@ fetch('./HeatWaveShelter.csv')
       showCurrentLocationMarker(latitude, longitude);
 
       // CSV 파일 로드
-      fetch('./HeatWaveShelter.csv')
+      fetch('./HeatWaveShelter1.csv')
         .then(response => response.text())
         .then(data => {
           markers = parseCSVData(data);
