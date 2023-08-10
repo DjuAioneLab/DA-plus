@@ -65,7 +65,7 @@ showCurrentLocationMarker(latitude, longitude);
 getCurrentAddress(latitude, longitude);
 
 // CSV 파일 로드
-fetch('./HeatWaveShelter.csv')
+fetch('./eqk1.csv')
   .then(response => response.text())
   .then(data => {
     markers = parseCSVData(data);
