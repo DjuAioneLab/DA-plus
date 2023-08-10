@@ -193,6 +193,15 @@ fetch('./HeatWaveShelter01.csv')
     displayMarkers(markers);
   })
   .catch(error => console.error('Error:', error));
+
+  // CSV 파일 로드
+  fetch('./HeatWaveShelter03.csv')
+  .then(response => response.text())
+  .then(data => {
+    markers = parseCSVData(data);
+    displayMarkers(markers);
+  })
+  .catch(error => console.error('Error:', error));
 }
 
 
@@ -235,6 +244,15 @@ fetch('./HeatWaveShelter01.csv')
         displayMarkers(markers);
       })
       .catch(error => console.error('Error:', error));
+
+       // CSV 파일 로드
+       fetch('./HeatWaveShelter03.csv')
+       .then(response => response.text())
+       .then(data => {
+         markers = parseCSVData(data);
+         displayMarkers(markers);
+       })
+       .catch(error => console.error('Error:', error));
     }
 
     function showError(error) {
