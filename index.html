@@ -165,6 +165,9 @@ var htmlMarker1 = {
             gridSize: 120,
             icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
             indexGenerator: [10, 100, 200, 500, 1000],
+            stylingFunction: function(markers, count) {
+                $(markers.getElement()).find('div:first-child').text(count);
+            }
         });
     }
 
