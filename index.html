@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>[지진]</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
     <script src="./markercluaster.js"></script>
     <style>
   
@@ -95,19 +95,17 @@
     <div id="map"></div>
 
     <script>
-        var map = new naver.maps.Map("map", {
-        zoom: 6,
-        center: new naver.maps.LatLng(36.2253017, 127.6460516),
-        zoomControl: true,
-        zoomControlOptions: {
-            position: naver.maps.Position.TOP_LEFT,
-            style: naver.maps.ZoomControlStyle.SMALL
-        }
-    }),
-    markers = [];
+        var mapOptions = {
+            center: new naver.maps.LatLng(37.5665, 126.9780),
+            zoom: 14,
+            mapTypeId: naver.maps.MapTypeId.NORMAL
+        };
 
- // 사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
- function setMapCenterToUserLocation() {
+        var map = new naver.maps.Map('map', mapOptions);
+        var markers = [];
+
+        // 사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
+        function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -124,38 +122,9 @@
                     };
                     var userMarker = new naver.maps.Marker(userMarkerOptions);
                     markers.push(userMarker);
- })}}
 
-
-var htmlMarker1 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker2 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker3 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker4 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker5 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    };
-
-    function onLoad() {
-        
-        loadCSV('./eqk1.csv', function(data) {
+                    // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
+                    loadCSV('./eqk1.csv', function(data) {
                         var lines = data.split('\n');
 
                         for (var i = 1; i < lines.length; i++) {
@@ -163,11 +132,10 @@ var htmlMarker1 = {
                             var 위치명 = values[0];
                             var 위도 = parseFloat(values[1]);
                             var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위치명, 위도, 경도);
+                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
 
                             var markerOptions = {
                                 position: locationLatLng,
-                                draggable: true,
                                 map: map,
                                 content: '<div style="padding:5px;">' + 위치명 + '</div>'
                             };
@@ -175,38 +143,73 @@ var htmlMarker1 = {
                             var marker = new naver.maps.Marker(markerOptions);
                             markers.push(marker);
                         }
+
+                           for (var i = 0; i < markers.length; i++) {
+                            oms.addMarker(markers[i]);
+                        }
                     });
-
-
-        var markerClustering = new MarkerClustering({
-            minClusterSize: 2,
-            maxZoom: 12,
-            map: map,
-            markers: markers,
-            disableClickZoom: false,
-            gridSize: 120,
-            icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
-            indexGenerator: [10, 100, 200, 500, 1000],
-        });
-    }
-
-    
-
-    // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
-    function loadCSV(url, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                callback(xhr.responseText);
+                });
             }
-        };
-        xhr.send();
-    }
+        }
 
-    onLoad();
+        $(document).redy(function(){
+            var htmlMarker1 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+        },
+        htmlMarker2 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+        },
+        htmlMarker3 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+        },
+        htmlMarker4 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+        },
+        htmlMarker5 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+         };
+
+         var markerClustering = new MarkerClustering({
+        minClusterSize: 2,
+        maxZoom: 8,
+        map: map,
+        markers: markers,
+        disableClickZoom: false,
+        gridSize: 120,
+        icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+        indexGenerator: [10, 100, 200, 500, 1000],
+        stylingFunction: function(clusterMarker, count) {
+            $(clusterMarker.getElement()).find('div:first-child').text(count);
+        }
+        });
+        });
+       
 
 
+        // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
+        function loadCSV(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr.responseText);
+                }
+            };
+            xhr.send();
+        }
+
+        // setMapCenterToUserLocation 함수를 호출하여 사용자 위치로 지도 중심 설정과 마커 표시
+        setMapCenterToUserLocation();
 
     var hamburger = document.getElementById('hamburger');
     var closeBtn = document.getElementById('closeBtn');
