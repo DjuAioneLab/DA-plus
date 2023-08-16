@@ -432,7 +432,7 @@ function showNearestShelterText(nearestShelterName) {
             style: naver.maps.ZoomControlStyle.SMALL
         }
     }),
-    markers = [];
+   var markers = [];
 
 var htmlMarker1 = {
         content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-1.png);background-size:contain;"></div>',
@@ -460,28 +460,6 @@ var htmlMarker1 = {
         anchor: N.Point(20, 20)
     };
 
- function onLoad() {
-        loadCSV('./HeatWaveShelter01.csv', function(data) {
-                        var lines = data.split('\n');
-
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(',');
-                            var 무더위쉼터명 = values[0];
-                            var 위도 = parseFloat(values[1]);
-                            var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
-
-                            var markerOptions = {
-                                position: locationLatLng,
-                                draggable: true,
-                                map: map,
-                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                            };
-
-                            var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
-                        }
-                    });
 
 
         var markerClustering = new MarkerClustering({
@@ -508,7 +486,7 @@ var htmlMarker1 = {
         alert("가장 가까운 무더위쉼터 정보를 가져올 수 없습니다.");
       }
     }
-    onLoad();
+
   </script>
 
     <div id="currentLocationText"></div>
