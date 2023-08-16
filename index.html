@@ -104,37 +104,9 @@
         var map = new naver.maps.Map('map', mapOptions);
         var markers = [];
 
-
-        var htmlMarker1 = {
-            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
-            size: N.Size(40, 40),
-            anchor: N.Point(20, 20)
-            },
-            htmlMarker2 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker3 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker4 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker5 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            };
-
-
-    function onLoad() {
-
-        if ('geolocation' in navigator) {
+        //사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
+        function setMapCenterToUserLocation() {
+            if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     map.setCenter(userLatLng);
@@ -174,6 +146,37 @@
                     });
                 });
             }
+            testt();
+        }
+
+        var htmlMarker1 = {
+            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+            },
+            htmlMarker2 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker3 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker4 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker5 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            };
+
+
+    function testt() {
 
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
