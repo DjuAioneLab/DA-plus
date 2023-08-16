@@ -342,13 +342,9 @@ naver.maps.Util.ClassExtend(MarkerClustering, naver.maps.OverlayView, {
 	_updateClusters: function() {
 		var clusters = this._clusters;
 
-		clearList();
-
 		for (var i = 0, ii = clusters.length; i < ii; i++) {
 			clusters[i].updateCluster();
 		}
-
-		showList();
 	},
 
 	/**
