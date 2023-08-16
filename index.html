@@ -181,33 +181,7 @@
 
 
     function onLoad() {
-        loadCSV('./eqk1.csv', function(data) {
-                        var lines = data.split('\n');
 
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(',');
-                            var 위치명 = values[0];
-                            var 위도 = parseFloat(values[1]);
-                            var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
-
-                            var markerOptions = {
-                                position: locationLatLng,
-                                map: map,
-                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                            };
-
-                            var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
-                        }
-
-                        var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
-
-                
-                        for (var i = 0; i < markers.length; i++) {
-                            oms.addMarker(markers[i]);
-                        }
-                    });
 
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
