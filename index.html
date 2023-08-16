@@ -95,36 +95,45 @@
     <div id="map"></div>
 
     <script>
-        var mapOptions = {
-            center: new naver.maps.LatLng(37.5665, 126.9780),
-            zoom: 14,
-            mapTypeId: naver.maps.MapTypeId.NORMAL
-        };
+        var map = new naver.maps.Map("map", {
+        zoom: 6,
+        center: new naver.maps.LatLng(36.2253017, 127.6460516),
+        zoomControl: true,
+        zoomControlOptions: {
+            position: naver.maps.Position.TOP_LEFT,
+            style: naver.maps.ZoomControlStyle.SMALL
+        }
+    }),
+    markers = [];
 
-        var map = new naver.maps.Map('map', mapOptions);
-        var markers = [];
+var htmlMarker1 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-1.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+    },
+    htmlMarker2 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-2.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+    },
+    htmlMarker3 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-3.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+    },
+    htmlMarker4 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-4.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+    },
+    htmlMarker5 = {
+        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url('+ HOME_PATH +'/img/cluster-marker-5.png);background-size:contain;"></div>',
+        size: N.Size(40, 40),
+        anchor: N.Point(20, 20)
+    };
 
-        //사용자의 위치를 가져와서 지도의 중심을 설정하고 주변에 마커 표시하는 함수
-        function setMapCenterToUserLocation() {
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    map.setCenter(userLatLng);
-
-                    // 사용자 위치 주변에 마커 생성
-                    var userMarkerOptions = {
-                        position: userLatLng,
-                        map: map,
-                        icon: {
-                            content: '<div class="user-marker">내 위치</div>',
-                            anchor: new naver.maps.Point(12, 24)
-                        }
-                    };
-                    var userMarker = new naver.maps.Marker(userMarkerOptions);
-                    markers.push(userMarker);
-
-                    // 대피소.csv 파일에서 데이터를 가져와서 마커 생성
-                    loadCSV('./eqk1.csv', function(data) {
+    function onLoad() {
+        loadCSV('./eqk1.csv', function(data) {
                         var lines = data.split('\n');
 
                         for (var i = 1; i < lines.length; i++) {
@@ -136,6 +145,7 @@
 
                             var markerOptions = {
                                 position: locationLatLng,
+                                draggable: true,
                                 map: map,
                                 content: '<div style="padding:5px;">' + 위치명 + '</div>'
                             };
@@ -144,39 +154,7 @@
                             markers.push(marker);
                         }
                     });
-                });
-            }
-            testt();
-        }
 
-        var htmlMarker1 = {
-            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
-            size: N.Size(40, 40),
-            anchor: N.Point(20, 20)
-            },
-            htmlMarker2 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker3 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker4 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            },
-            htmlMarker5 = {
-                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
-                size: N.Size(40, 40),
-                anchor: N.Point(20, 20)
-            };
-
-
-    function testt() {
 
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
@@ -191,7 +169,8 @@
                 $(clusterMarker.getElement()).find('div:first-child').text(count);
             }
         });
-    };
+    }
+
       
 
 
@@ -209,8 +188,6 @@
         xhr.send();
     }
 
-    // setMapCenterToUserLocation 함수를 호출하여 사용자 위치로 지도 중심 설정과 마커 표시
-    setMapCenterToUserLocation();
 
 
     var hamburger = document.getElementById('hamburger');
