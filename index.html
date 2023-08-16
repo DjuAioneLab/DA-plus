@@ -473,21 +473,29 @@ function onLoad() {
             });
 
         markers.push(marker);
-        }
     }
+    var clusterMarkers = new MarkerClustering({
+        minClusterSize: 2,
+        maxZoom: 12,
+        map: map,
+        markers: markers,
+        disableClickZoom: false,
+        gridSize: 120,
+        icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+        indexGenerator: [10, 100, 200, 500, 1000],
+    });
+}
 
+// CSV 파일 로드 후에 호출되도록 수정
+fetch('./HeatWaveShelter01.csv')
+    .then(response => response.text())
+    .then(data => {
+        markers = parseCSVData(data);
+        displayMarkers(markers);
+        onLoad(); // onLoad 함수 호출
+    })
+    .catch(error => console.error('Error:', error));
 
-
-        var markerClustering = new MarkerClustering({
-            minClusterSize: 2,
-            maxZoom: 12,
-            map: map,
-            markers: markers,
-            disableClickZoom: false,
-            gridSize: 120,
-            icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
-            indexGenerator: [10, 100, 200, 500, 1000],
-        });
     
 
    
