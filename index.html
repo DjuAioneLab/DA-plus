@@ -500,15 +500,19 @@ function onLoad() {
     
 
 
-// CSV 파일 로드 후에 호출되도록 수정
-fetch('./HeatWaveShelter01.csv')
-    .then(response => response.text())
-    .then(data => {
-        markers = parseCSVData(data);
-        displayMarkers(markers);
-        onLoad(); // onLoad 함수 호출
-    })
-    .catch(error => console.error('Error:', error));
+ // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
+  function loadCSV(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            callback(xhr.responseText);
+        }
+    };
+    xhr.send();
+}
+
+onLoad();
 
     
 
