@@ -460,33 +460,41 @@ var htmlMarker1 = {
         anchor: N.Point(20, 20)
     };
 
-function onLoad() {
-    var data = accidentDeath.searchResult.accidentDeath;
+ function onLoad() {
+        loadCSV('./HeatWaveShelter01.csv', function(data) {
+                        var lines = data.split('\n');
 
-    for (var i = 0, ii = data.length; i < ii; i++) {
-        var spot = data[i],
-            latlng = new naver.maps.LatLng(spot.grd_la, spot.grd_lo),
-            marker = new naver.maps.Marker({
-                position: latlng,
-                draggable: true
-            });
+                        for (var i = 1; i < lines.length; i++) {
+                            var values = lines[i].split(',');
+                            var 무더위쉼터명 = values[0];
+                            var 위도 = parseFloat(values[1]);
+                            var 경도 = parseFloat(values[2]);
+                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
 
-        markers.push(marker);
+                            var markerOptions = {
+                                position: locationLatLng,
+                                draggable: true,
+                                map: map,
+                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
+                            };
+
+                            var marker = new naver.maps.Marker(markerOptions);
+                            markers.push(marker);
+                        }
+                    });
+
+
+        var markerClustering = new MarkerClustering({
+            minClusterSize: 2,
+            maxZoom: 12,
+            map: map,
+            markers: markers,
+            disableClickZoom: false,
+            gridSize: 120,
+            icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+            indexGenerator: [10, 100, 200, 500, 1000],
+        });
     }
-
-    var markerClustering = new MarkerClustering({
-        minClusterSize: 2,
-        maxZoom: 8,
-        map: map,
-        markers: markers,
-        disableClickZoom: false,
-        gridSize: 120,
-        icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
-        indexGenerator: [10, 100, 200, 500, 1000],
-        stylingFunction: function(clusterMarker, count) {
-            $(clusterMarker.getElement()).find('div:first-child').text(count);
-        }
-    });
 }
     <script>
 
