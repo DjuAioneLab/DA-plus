@@ -68,6 +68,14 @@
         height: calc(100vh - 60px);
         margin-top: 50px;
     }
+    .user-location-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    }
     .user-marker {
     background-color: #ff0606;
     color: #fff;
@@ -80,9 +88,9 @@
 </head>
 <body>
     <div class="navbar">
+        <div class="user-location-button" id="userLocationButton">내 위치</div>
         <div class="hamburger" id="hamburger">&#9776;</div>
         지진
-        <div class="user-location-button" id="userLocationButton">내 위치</div>
     </div>
      <div id="sidebar" class="sidebar">
         <div class="close-btn" id="closeBtn">&times;</div>
