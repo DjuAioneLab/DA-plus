@@ -237,13 +237,30 @@ var htmlMarker1 = {
 
 
     var userLocationButton = document.getElementById('userLocationButton');
-
-    userLocationButton.addEventListener('click', function() {
-    setMapCenterToUserLocation();
-    map.setCenter(userLatLng);
-    map.setZoom(3);
-    });
-
+    myLocationBtn.addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+    
+            var userLatLng = new naver.maps.LatLng(lat, lon);
+            
+            map.setCenter(userLatLng); // 사용자 위치로 지도 중심 이동
+            map.setZoom(3); // 원하는 줌 레벨로 조정 (예: 3)
+            
+            // 사용자 위치 마커 추가 (Naver 지도 API 사용)
+            var userMarkerOptions = {
+                position: userLatLng,
+                map: map,
+                icon: {
+                    content: '<div class="user-marker">내 위치</div>',
+                    anchor: new naver.maps.Point(12, 24)
+                }
+            };
+            var userMarker = new naver.maps.Marker(userMarkerOptions);
+        });
+    }
+});
 
     // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
     function loadCSV(url, callback) {
