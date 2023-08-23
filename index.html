@@ -68,6 +68,13 @@
         height: calc(100vh - 60px);
         margin-top: 50px;
     }
+    
+    #map-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    }
     .user-location-button {
     position: absolute;
     top: 10px;
@@ -88,10 +95,14 @@
 </head>
 <body>
     <div class="navbar">
-        <div class="user-location-button" id="userLocationButton">내 위치</div>
         <div class="hamburger" id="hamburger">&#9776;</div>
         지진
     </div>
+
+    <div id="map-controls">
+        <div class="user-location-button" id="userLocationButton">내 위치</div>
+    </div>
+
      <div id="sidebar" class="sidebar">
         <div class="close-btn" id="closeBtn">&times;</div>
         <h2>사이드바</h2>
