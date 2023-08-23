@@ -75,6 +75,29 @@
     border-radius: 5px;
     font-size: 12px;
     }
+        
+    .my-loc-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #333;
+    color: white;
+    font-size: 24px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    }
+    
+    .my-loc-btn:hover {
+        background-color: #555;
+    }
+
+        
     </style>
  
 </head>
@@ -93,8 +116,7 @@
         </ul>
     </div>
     <div id="map"></div>
-
-
+    <div class="my-loc-btn" id="myLocationBtn">📍</div>
 
     <script>
         var map = new naver.maps.Map("map", {
@@ -191,6 +213,25 @@ var htmlMarker1 = {
             }
         }
       
+    var myLocationBtn = document.getElementById('myLocationBtn');
+    myLocationBtn.addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+    
+            var layer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [
+                        new ol.Feature({
+                            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                        })
+                    ]
+                })
+            });
+
+
+    var myLocationBtnContainer = document.getElementById('myLocationBtn');
 
 
 
