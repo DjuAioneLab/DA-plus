@@ -68,21 +68,24 @@
         height: calc(100vh - 60px);
         margin-top: 50px;
     }
-    
+
     #map-controls {
     position: absolute;
     top: 10px;
     right: 10px;
     z-index: 1000;
     }
+
     .user-location-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: black;
     color: white;
-    }
+    padding: 8px 12px;
+    border: 1px solid black; /* 얇은 검정색 테두리 추가 */
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
     .user-marker {
     background-color: #ff0606;
     color: #fff;
