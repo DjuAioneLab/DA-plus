@@ -75,29 +75,6 @@
     border-radius: 5px;
     font-size: 12px;
     }
-        
-    .my-loc-btn {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background-color: #333;
-    color: white;
-    font-size: 24px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    }
-    
-    .my-loc-btn:hover {
-        background-color: #555;
-    }
-
-        
     </style>
  
 </head>
@@ -105,6 +82,7 @@
     <div class="navbar">
         <div class="hamburger" id="hamburger">&#9776;</div>
         지진
+        <div class="user-location-button" id="userLocationButton">내 위치</div>
     </div>
      <div id="sidebar" class="sidebar">
         <div class="close-btn" id="closeBtn">&times;</div>
@@ -116,7 +94,8 @@
         </ul>
     </div>
     <div id="map"></div>
-    <div class="my-loc-btn" id="myLocationBtn">📍</div>
+
+
 
     <script>
         var map = new naver.maps.Map("map", {
@@ -192,6 +171,7 @@ var htmlMarker1 = {
         });
     }
 
+    
     function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -213,27 +193,12 @@ var htmlMarker1 = {
             }
         }
       
-    var myLocationBtn = document.getElementById('myLocationBtn');
-    myLocationBtn.addEventListener('click', function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-    
-            var layer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [
-                        new ol.Feature({
-                            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-                        })
-                    ]
-                })
-            });
 
+    var userLocationButton = document.getElementById('userLocationButton');
 
-    var myLocationBtnContainer = document.getElementById('myLocationBtn');
-
-
+    userLocationButton.addEventListener('click', function() {
+    setMapCenterToUserLocation();
+    });
 
 
     // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
