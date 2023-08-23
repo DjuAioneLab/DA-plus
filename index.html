@@ -216,6 +216,26 @@ var htmlMarker1 = {
         }
       
 
+
+    var userLocationButton = document.getElementById('userLocationButton');
+    userLocationButton.addEventListener('click', function()  {
+        if (navigator.geolocation) {
+             navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+    
+                 var layer = new ol.layer.Vector({
+                     source: new ol.source.Vector({
+                        features: [
+                             new ol.Feature({
+                                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                        })
+                    ]
+                })
+            }); }
+    )}})
+
+
     var userLocationButton = document.getElementById('userLocationButton');
 
     userLocationButton.addEventListener('click', function() {
