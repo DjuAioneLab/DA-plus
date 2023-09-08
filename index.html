@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <meta charset="utf-8">
+    <meta charset="utf-8">
     <title>[지진]</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
     <script src="./markercluaster.js"></script>
@@ -17,12 +17,10 @@
         text-align: center;
         padding: 10px 0;
         font-size: 20px;
-        z-index: 1000;
     }
-        
     .hamburger {
         position: fixed;
-        top: 5px;
+        top: 10px;
         left: 10px;
         font-size: 24px;
         cursor: pointer;
@@ -36,7 +34,6 @@
         cursor: pointer;
         color: white;
     }
-        
     .sidebar {
         display: none;
         height: 100%;
@@ -47,32 +44,29 @@
         left: 0;
         background-color: #333;
         color: white;
-        padding: 20px 0;
+        padding-top: 20px;
         z-index: 1000;
     }
     .sidebar.active {
-        display: block;     
+        display: block;
+        
     }
 
     .sidebar ul li a {
         display: block;
-        padding:  10px;
+        padding: 10px 0;
         color: white;
         text-decoration: none;
-        text-align: left;
+        text-align: center;
         
     }
     .sidebar ul li a:hover {
         background-color: #555;
     }
-        
- #map {
-        position: fixed;
-        top: 50px;
-        left: 0;
+    #map {
         width: 100%;
-        height: calc(100% - 50px);
-        z-index: -1;
+        height: calc(100vh - 60px);
+        margin-top: 50px;
     }
 
     #map-controls {
@@ -83,26 +77,15 @@
     }
 
     .user-location-button {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      background-color: #333;
-      color: white;
-      font-size: 24px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 40px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
+    background-color: white;
+    color: black; /* 글씨 색상을 검정색으로 변경 */
+    padding: 8px 12px;
+    border: 1px solid black;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
-    .my-location-btn:hover {
-      background-color: #555;
-    }
-        
     .user-marker {
     background-color: #ff0606;
     color: #fff;
@@ -120,7 +103,7 @@
     </div>
 
     <div id="map-controls">
-        <div class="user-location-button" id="userLocationButton">📍</div>
+        <div class="user-location-button" id="userLocationButton">현위치</div>
     </div>
 
      <div id="sidebar" class="sidebar">
