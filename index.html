@@ -65,10 +65,13 @@
         background-color: #555;
     }
         
-    #map {
+ #map {
+        position: fixed;
+        top: 50px;
+        left: 0;
         width: 100%;
-        height: calc(100vh - 60px);
-        margin-top: 50px;
+        height: calc(100% - 50px);
+        z-index: -1;
     }
 
     #map-controls {
@@ -79,15 +82,26 @@
     }
 
     .user-location-button {
-    background-color: white;
-    color: black; /* 글씨 색상을 검정색으로 변경 */
-    padding: 8px 12px;
-    border: 1px solid black;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      color: white;
+      font-size: 24px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
 }
 
+    .my-location-btn:hover {
+      background-color: #555;
+    }
+        
     .user-marker {
     background-color: #ff0606;
     color: #fff;
@@ -105,7 +119,7 @@
     </div>
 
     <div id="map-controls">
-        <div class="user-location-button" id="userLocationButton">현위치</div>
+        <div class="user-location-button" id="userLocationButton">📍</div>
     </div>
 
      <div id="sidebar" class="sidebar">
