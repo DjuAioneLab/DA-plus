@@ -174,7 +174,7 @@
             <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/contents/prevent/prevent09.html?menuSeq=126">지진 시 행동 요령</a></li>        
             <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/ppn/emg/SDIJKM5602.html?menuSeq=596">비상연락망</a></li>
         <hr/>
-      <li><a href="https://djuaionelab.github.io/DA-plus/index.html">폭염</a></li>
+      <li><a href="https://github.com/J0HW/practice/blob/main/index.html">폭염</a></li>
       <li><a href="https://3hwangg.github.io/23opensw/floodmap2.html">홍수(지방하천)</a></li>
       <li><a href="https://3hwangg.github.io/23opensw/floodmap1.html">홍수(국가하천)</a></li>    
         </ul>
@@ -205,7 +205,20 @@
             style: naver.maps.ZoomControlStyle.SMALL
         }
     }),
-    markers = [];
+  var  markers = [];
+  var csvFiles = [
+            './eqk1.csv',
+            './eqk2.csv',
+            './eqk3.csv',
+            './eqk4.csv',
+            './eqk5.csv',
+            './eqk6.csv',
+            './eqk7.csv',
+            './eqk8.csv',
+            './eqk9.csv',
+            './eqk10.csv',
+            './eqk11.csv'
+    ];
 
 var htmlMarker1 = {
         content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
@@ -233,28 +246,31 @@ var htmlMarker1 = {
         anchor: N.Point(20, 20)
     };
 
-    function onLoad() {
-        loadCSV('./eqk1.csv', function(data) {
-                        var lines = data.split('\n');
+   csvFiles.forEach(function (csvFile) {
+            fetch(csvFile)
+                .then(response => response.text())
+                .then(data => {
+                    var lines = data.split('\n');
+                    for (var i = 1; i < lines.length; i++) {
+                        var values = lines[i].split(',');
+                        var 위치명 = values[0];
+                        var 위도 = parseFloat(values[1]);
+                        var 경도 = parseFloat(values[2]);
+                        var locationLatLng = new naver.maps.LatLng(위도, 경도);
 
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(',');
-                            var 위치명 = values[0];
-                            var 위도 = parseFloat(values[1]);
-                            var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
-
-                            var markerOptions = {
-                                position: locationLatLng,
-                                draggable: true,
-                                map: map,
-                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                            };
-
-                            var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
-                        }
-                    });
+                        var markerOptions = {
+                            position: locationLatLng,
+                            draggable: true,
+                            map: map,
+                            title: '이곳의 위치는 ' + 위치명 + ' 입니다.'
+                        };
+                        
+                        var marker = new naver.maps.Marker(markerOptions);
+                        markers.push(marker);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
         
         var markers = [];
         var csvFiles = [
