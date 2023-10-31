@@ -351,6 +351,27 @@ var htmlMarker1 = {
 
     onLoad();
     setMapCenterToUserLocation();
+        var locationLayer = new ol.layer.Vector({
+      source: new ol.source.Vector()
+      });
+        map.addLayer(locationLayer);
+        var myLocationBtn = document.getElementById('myLocationBtn');
+        myLocationBtn.addEventListener('click', function() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+        var layer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: [
+              new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+              })
+            ]
+          })
+        });
+        map.addLayer(layer);
   
 
 
@@ -366,6 +387,7 @@ var htmlMarker1 = {
     closeBtn.addEventListener('click', function() {
         sidebar.classList.remove('active');
     });
+        var myLocationBtnContainer = document.getElementById('myLocationBtn');
     </script>
 </body>
 </html>
