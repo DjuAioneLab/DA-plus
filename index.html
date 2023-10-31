@@ -255,8 +255,90 @@ var htmlMarker1 = {
                             markers.push(marker);
                         }
                     });
+        fetch('./eqk3.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+        fetch('./eqk2.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+        fetch('./eqk4.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+fetch('./eqk5.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+    fetch('./eqk6.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+        fetch('./eqk7.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
 
 
+        fetch('./eqk8.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+
+        fetch('./eqk9.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+
+        fetch('./eqk10.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+
+
+        fetch('./eqk11.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+        
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
             maxZoom: 12,
