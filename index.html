@@ -1,385 +1,354 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[지진]</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script>
-    <script src="./markercluaster.js"></script>
-    <style>
-  .ol-control button,
-    .ol-attribution,
-    .ol-scale-line-inner {
-      font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif !important;
-    }
-
- .ol-popup {
-      font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif !important;
-      font-size: 12px;
-      position: absolute;
-      background-color: white;
-      -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-      filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #cccccc;
-      bottom: 12px;
-      left: -48px;
-      min-width: 100px;
-    }     
-
-    .ol-popup:after {
-      border-top-color: white;
-      border-width: 10px;
-      left: 48px;
-      margin-left: -10px;
-    }
-
-    .ol-popup:before {
-      border-top-color: #cccccc;
-      border-width: 11px;
-      left: 48px;
-      margin-left: -11px;
-    }
-
-    .ol-popup-closer {
-      text-decoration: none;
-      position: absolute;
-      top: 2px;
-      right: 8px;
-    }
-
-    .ol-popup-closer:after {
-      content: "✖";
-      color: #c3c3c3;
-    }
-        
-  .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 20px;
-      z-index: 1000;
-    }
-    .hamburger {
-      position: fixed;
-      top: 5px;
-      left: 10px;
-      font-size: 24px;
-      cursor: pointer;
-      color: white;
-    }
-    .close-btn {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        font-size: 24px;
-        cursor: pointer;
-        color: white;
-    }
-    .sidebar {
-      display: none;
-      height: 100%;
-      width: 250px;
-      position: fixed;
-      text-align: center;
-      top: 0;
-      left: 0;
-      background-color: #333;
-      color: white;
-      padding-top: 20px;
-      z-index: 1000;
-    }
-    .sidebar.active {
-        display: block;
-        
-    }
-
-    .sidebar ul li a {
-        display: block;
-        padding: 10px 0;
-        color: white;
-        text-decoration: none;
-        text-align: center;
-        
-    }
-    .sidebar ul li a:hover {
-        background-color: #555;
-    }
-    #map {
-        position: relative;
-        width: 100%;
-        height: calc(100vh - 60px);
-        margin-top: 50px;
-    }
-
-    #map-controls {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    z-index: 1000;
-    }
-
- .user-location-button {
- position: absolute;
- bottom: 20px; // 아래에서부터의 위치 
- right: 20px; // 오른쪽에서부터의 위치 
- width: 40px;
- height: 40px;
- background-color: #333;
- color: white;
- font-size: 24px;
- border-radius: 50%;
- text-align: center;
- line-height: 40px;
- cursor: pointer;
- box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
- z-index: 1000;
+<!DOCTYPE html> <html> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>[지진]</title> <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=6lcb5pk9bx"></script> <script src="./markercluaster.js"></script> <style> .ol-control button, .ol-attribution, .ol-scale-line-inner { font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif !important; }
+.ol-popup {
+font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif !important;
+font-size: 12px;
+position: absolute;
+background-color: white;
+-webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+padding: 15px;
+border-radius: 10px;
+border: 1px solid #cccccc;
+bottom: 12px;
+left: -48px;
+min-width: 100px;
 }
-           .my-location-btn:hover {
-      background-color: #555;
-    }
 
-    .user-marker {
-    background-color: #ff0606;
-    color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
-    }
-        
-    </style>
- 
-</head>
-<body>
-    <div class="navbar">
-        <div class="hamburger" id="hamburger">&#9776;</div>
-        지진
-    </div>
+.ol-popup:after {
+  border-top-color: white;
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px;
+}
 
-    <div id="map-controls">
-        <div class="user-location-button" id="userLocationButton">📍</div>
-    </div>
+.ol-popup:before {
+  border-top-color: #cccccc;
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px;
+}
 
-     <div id="sidebar" class="sidebar">
-        <div class="close-btn" id="closeBtn">&times;</div>
-        <h2>사이드바</h2>
-        <ul style="list-style-type:none">
-             <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/sfc/res/victimList.jsp?acmdfclty_cd=2&emgPage=Y&menuSeq=855">지진대피장소 검색</a></li>
-            <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/contents/prevent/prevent09.html?menuSeq=126">지진 시 행동 요령</a></li>        
-            <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/ppn/emg/SDIJKM5602.html?menuSeq=596">비상연락망</a></li>
-        <hr/>
-      <li><a href="https://djuaionelab.github.io/DA-plus/index.html">폭염</a></li>
-      <li><a href="https://3hwangg.github.io/23opensw/floodmap2.html">홍수(지방하천)</a></li>
-      <li><a href="https://3hwangg.github.io/23opensw/floodmap1.html">홍수(국가하천)</a></li>    
-        </ul>
-    <br /><br /><br /><br />
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+}
+
+.ol-popup-closer:after {
+  content: "✖";
+  color: #c3c3c3;
+}
+    
+.navbar {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+background-color: #333;
+color: white;
+text-align: center;
+padding: 10px 0;
+font-size: 20px;
+z-index: 1000;
+}
+.hamburger {
+position: fixed;
+top: 5px;
+left: 10px;
+font-size: 24px;
+cursor: pointer;
+color: white;
+}
+.close-btn {
+position: fixed;
+top: 10px;
+left: 10px;
+font-size: 24px;
+cursor: pointer;
+color: white;
+}
+.sidebar {
+display: none;
+height: 100%;
+width: 250px;
+position: fixed;
+text-align: center;
+top: 0;
+left: 0;
+background-color: #333;
+color: white;
+padding-top: 20px;
+z-index: 1000;
+}
+.sidebar.active {
+display: block;
+
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 10px 0;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    
+}
+.sidebar ul li a:hover {
+    background-color: #555;
+}
+#map {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px);
+    margin-top: 50px;
+}
+
+#map-controls {
+position: absolute;
+top: 50px;
+right: 10px;
+z-index: 1000;
+}
+.user-location-button {
+position: absolute;
+bottom: 20px; // 아래에서부터의 위치
+right: 20px; // 오른쪽에서부터의 위치
+width: 40px;
+height: 40px;
+background-color: #333;
+color: white;
+font-size: 24px;
+border-radius: 50%;
+text-align: center;
+line-height: 40px;
+cursor: pointer;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+z-index: 1000;
+}
+.my-location-btn:hover {
+background-color: #555;
+}
+
+.user-marker {
+background-color: #ff0606;
+color: #fff;
+padding: 5px;
+border-radius: 5px;
+font-size: 12px;
+}
+    
+</style>
+</head> <body> <div class="navbar"> <div class="hamburger" id="hamburger">&#9776;</div> 지진 </div>
+<div id="map-controls">
+    <div class="user-location-button" id="userLocationButton">📍</div>
+</div>
+
+ <div id="sidebar" class="sidebar">
+    <div class="close-btn" id="closeBtn">&times;</div>
+    <h2>사이드바</h2>
     <ul style="list-style-type:none">
-        <li style="text-align: left; padding: 0 20 0 0;">
-        <h4>지진대피지도는<br />현재 위치를 확인하고, 전국 지진 대피장소 표준 데이터를 제공받아 전국의 지진대피소 위치와 현재 위치에서 가장 가까운 지진대피소를 알 수 있습니다.</h4></li>
+         <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/sfc/res/victimList.jsp?acmdfclty_cd=2&emgPage=Y&menuSeq=855">지진대피장소 검색</a></li>
+        <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/contents/prevent/prevent09.html?menuSeq=126">지진 시 행동 요령</a></li>        
+        <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/ppn/emg/SDIJKM5602.html?menuSeq=596">비상연락망</a></li>
+    <hr/>
+  <li><a href="https://djuaionelab.github.io/DA-plus/index.html">폭염</a></li>
+  <li><a href="https://3hwangg.github.io/23opensw/floodmap2.html">홍수(지방하천)</a></li>
+  <li><a href="https://3hwangg.github.io/23opensw/floodmap1.html">홍수(국가하천)</a></li>    
     </ul>
-    <br />
-    <h5>개발자</h5>
-    <p>미래지기</p>
-    </div>
-    <div id="map"></div>
+<br /><br /><br /><br />
+<ul style="list-style-type:none">
+    <li style="text-align: left; padding: 0 20 0 0;">
+    <h4>지진대피지도는<br />현재 위치를 확인하고, 전국 지진 대피장소 표준 데이터를 제공받아 전국의 지진대피소 위치와 현재 위치에서 가장 가까운 지진대피소를 알 수 있습니다.</h4></li>
+</ul>
+<br />
+<h5>개발자</h5>
+<p>미래지기</p>
+</div>
+<div id="map"></div>
 
-    <div id="popup" class="ol-popup">
-    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-    <div id="popup-content"></div>
-  </div>
+<div id="popup" class="ol-popup">
+<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+<div id="popup-content"></div>
+</div>
+<script>
 
-    <script>
-  
-        var map = new naver.maps.Map("map", {
-        zoom: 6,
-        center: new naver.maps.LatLng(36.2253017, 127.6460516),
-        zoomControl: true,
-        zoomControlOptions: {
-            position: naver.maps.Position.TOP_LEFT,
-            style: naver.maps.ZoomControlStyle.SMALL
-        }
-    }),
-    markers = [];
-
+    var map = new naver.maps.Map("map", {
+    zoom: 6,
+    center: new naver.maps.LatLng(36.2253017, 127.6460516),
+    zoomControl: true,
+    zoomControlOptions: {
+        position: naver.maps.Position.TOP_LEFT,
+        style: naver.maps.ZoomControlStyle.SMALL
+    }
+}),
+markers = [];
 var htmlMarker1 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker2 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker3 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker4 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    },
-    htmlMarker5 = {
-        content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
-        size: N.Size(40, 40),
-        anchor: N.Point(20, 20)
-    };
+content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
+size: N.Size(40, 40),
+anchor: N.Point(20, 20)
+},
+htmlMarker2 = {
+content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-2.png);background-size:contain;"></div>',
+size: N.Size(40, 40),
+anchor: N.Point(20, 20)
+},
+htmlMarker3 = {
+content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-3.png);background-size:contain;"></div>',
+size: N.Size(40, 40),
+anchor: N.Point(20, 20)
+},
+htmlMarker4 = {
+content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-4.png);background-size:contain;"></div>',
+size: N.Size(40, 40),
+anchor: N.Point(20, 20)
+},
+htmlMarker5 = {
+content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-5.png);background-size:contain;"></div>',
+size: N.Size(40, 40),
+anchor: N.Point(20, 20)
+};
 
-    function onLoad() {
-        loadCSV('./eqk1.csv', function(data) {
-                        var lines = data.split('\n');
+function onLoad() {
+    loadCSV('./eqk1.csv', function(data) {
+                    var lines = data.split('\n');
 
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(',');
-                            var 위치명 = values[0];
-                            var 위도 = parseFloat(values[1]);
-                            var 경도 = parseFloat(values[2]);
-                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
+                    for (var i = 1; i < lines.length; i++) {
+                        var values = lines[i].split(',');
+                        var 위치명 = values[0];
+                        var 위도 = parseFloat(values[1]);
+                        var 경도 = parseFloat(values[2]);
+                        var locationLatLng = new naver.maps.LatLng(위도, 경도);
 
-                            var markerOptions = {
-                                position: locationLatLng,
-                                draggable: true,
-                                map: map,
-                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
-                            };
+                        var markerOptions = {
+                            position: locationLatLng,
+                            draggable: true,
+                            map: map,
+                            content: '<div style="padding:5px;">' + 위치명 + '</div>'
+                        };
 
-                            var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
-                        }
-                    });
-
-
-        var markerClustering = new MarkerClustering({
-            minClusterSize: 2,
-            maxZoom: 12,
-            map: map,
-            markers: markers,
-            disableClickZoom: false,
-            gridSize: 120,
-            icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
-            indexGenerator: [10, 100, 200, 500, 1000],
-        });
-    }
-
-    
-    function setMapCenterToUserLocation() {
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    map.setCenter(userLatLng);
-
-                    // Create a user marker at the user's location
-                    var userMarkerOptions = {
-                        position: userLatLng,
-                        map: map,
-                        icon: {
-                            content: '<div class="user-marker">내 위치</div>',
-                            anchor: new naver.maps.Point(12, 24)
-                        }
-                    };
-                    var userMarker = new naver.maps.Marker(userMarkerOptions);
-                    markers.push(userMarker);
+                        var marker = new naver.maps.Marker(markerOptions);
+                        markers.push(marker);
+                    }
                 });
-            }
-        }
-      
-    var markerOptions = {
-    position: locationLatLng,
-    draggable: true,
-    map: map,
-    title: 위치명,
-    content: '<div style="padding:5px;">' + 위치명 + '</div>'
-    };
 
-    var userLocationButton = document.getElementById('userLocationButton');
-    userLocationButton.addEventListener('click', function()  {
-        if (navigator.geolocation) {
-             navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
-    
-                 var layer = new ol.layer.Vector({
-                     source: new ol.source.Vector({
-                        features: [
-                             new ol.Feature({
-                                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-                        })
-                    ]
-                })
-            }); }
-    )}})
 
-    function setMapCenterToUserLocation() {
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            map.setCenter(userLatLng);
-
-            var userMarkerOptions = {
-                position: userLatLng,
-                map: map,
-                icon: {
-                    content: '<div class="user-marker">내 위치</div>',
-                    anchor: new naver.maps.Point(12, 24)
-                }
-            };
-            var userMarker = new naver.maps.Marker(userMarkerOptions);
-            markers.push(userMarker);
-        });
-    }
-    }
-
-    var userLocationButton = document.getElementById('userLocationButton');
-    userLocationButton.addEventListener('click', function() {
-    setMapCenterToUserLocation();
-    map.setZoom(15);
-    
+    var markerClustering = new MarkerClustering({
+        minClusterSize: 2,
+        maxZoom: 12,
+        map: map,
+        markers: markers,
+        disableClickZoom: false,
+        gridSize: 120,
+        icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+        indexGenerator: [10, 100, 200, 500, 1000],
     });
+}
 
 
-    // CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
-    function loadCSV(url, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                callback(xhr.responseText);
+function setMapCenterToUserLocation() {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(userLatLng);
+
+                // Create a user marker at the user's location
+                var userMarkerOptions = {
+                    position: userLatLng,
+                    map: map,
+                    icon: {
+                        content: '<div class="user-marker">내 위치</div>',
+                        anchor: new naver.maps.Point(12, 24)
+                    }
+                };
+                var userMarker = new naver.maps.Marker(userMarkerOptions);
+                markers.push(userMarker);
+            });
+        }
+    }
+  
+
+
+var userLocationButton = document.getElementById('userLocationButton');
+userLocationButton.addEventListener('click', function()  {
+    if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+             var layer = new ol.layer.Vector({
+                 source: new ol.source.Vector({
+                    features: [
+                         new ol.Feature({
+                             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                    })
+                ]
+            })
+        }); }
+)}})
+
+function setMapCenterToUserLocation() {
+if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(userLatLng);
+
+        var userMarkerOptions = {
+            position: userLatLng,
+            map: map,
+            icon: {
+                content: '<div class="user-marker">내 위치</div>',
+                anchor: new naver.maps.Point(12, 24)
             }
         };
-        xhr.send();
-    }
-
-    onLoad();
-    setMapCenterToUserLocation();
-  
-
-
-
-    var hamburger = document.getElementById('hamburger');
-    var closeBtn = document.getElementById('closeBtn');
-    var sidebar = document.getElementById('sidebar');
-
-    hamburger.addEventListener('click', function() {
-        sidebar.classList.add('active');
+        var userMarker = new naver.maps.Marker(userMarkerOptions);
+        markers.push(userMarker);
     });
+}
+}
 
-    closeBtn.addEventListener('click', function() {
-        sidebar.classList.remove('active');
-    });
-          window.onload = function() {
-    var userLocationButton = document.getElementById('userLocationButton');
-    userLocationButton.style.position = "fixed";
-    userLocationButton.style.bottom = "20px";
-    userLocationButton.style.right = "20px";
-      }
-    </script>
-</body>
-</html>
+var userLocationButton = document.getElementById('userLocationButton');
+userLocationButton.addEventListener('click', function() {
+setMapCenterToUserLocation();
+map.setZoom(15);
+
+});
+
+
+// CSV 데이터를 가져오는 함수 (XMLHttpRequest 사용)
+function loadCSV(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            callback(xhr.responseText);
+        }
+    };
+    xhr.send();
+}
+
+onLoad();
+setMapCenterToUserLocation();
+
+
+
+
+var hamburger = document.getElementById('hamburger');
+var closeBtn = document.getElementById('closeBtn');
+var sidebar = document.getElementById('sidebar');
+
+hamburger.addEventListener('click', function() {
+    sidebar.classList.add('active');
+});
+
+closeBtn.addEventListener('click', function() {
+    sidebar.classList.remove('active');
+});
+      window.onload = function() {
+var userLocationButton = document.getElementById('userLocationButton');
+userLocationButton.style.position = "fixed";
+userLocationButton.style.bottom = "20px";
+userLocationButton.style.right = "20px";
+  }
+</script>
+</body> </html>
