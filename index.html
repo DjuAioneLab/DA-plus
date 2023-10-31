@@ -252,7 +252,18 @@ var htmlMarker1 = {
                             };
 
                             var marker = new naver.maps.Marker(markerOptions);
-                            markers.push(marker);
+
+                             naver.maps.Event.addListener(marker, "mouseover", function(e) {
+                            var infowindow = new naver.maps.InfoWindow({
+                            content: '<h4 style="margin:10px;">현재 위치는 ' + e.overlay.getTitle() + '입니다.</h4>',
+                            backgroundColor: "#00ff00",
+                            borderColor: "#00ff00",
+                            borderWidth: 5,
+                            anchor: new naver.maps.Point(0, 0)
+                    });
+                    infowindow.open(map, marker);
+                });                            
+                         markers.push(marker);
                         }
                     });
 
@@ -269,6 +280,8 @@ var htmlMarker1 = {
         });
     }
 
+
+    
     
     function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
