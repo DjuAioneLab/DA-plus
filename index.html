@@ -255,97 +255,21 @@ var htmlMarker1 = {
                             markers.push(marker);
                         }
                     });
-        fetch('./eqk1.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
         
-        fetch('./eqk3.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-        fetch('./eqk2.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-        fetch('./eqk4.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-fetch('./eqk5.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-    fetch('./eqk6.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-        fetch('./eqk7.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-
-        fetch('./eqk8.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-
-        fetch('./eqk9.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-
-        fetch('./eqk10.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
-
-
-        fetch('./eqk11.csv')
- .then(response => response.text())
- .then(data => {
-   markers = parseCSVData(data);
-   displayMarkers(markers);
- })
- .catch(error => console.error('Error:', error));
+        var markers = [];
+        var csvFiles = [
+            './eqk1.csv',
+            './eqk2.csv',
+            './eqk3.csv',
+            './eqk4.csv',
+            './eqk5.csv',
+            './eqk6.csv',
+            './eqk7.csv',
+            './eqk8.csv',
+            './eqk9.csv',
+            './eqk10.csv',
+            './eqk11.csv'
+        ];
         
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
@@ -359,6 +283,66 @@ fetch('./eqk5.csv')
         });
     }
 
+         function findNextNearestShelter() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const currentLatitude = position.coords.latitude;
+          const currentLongitude = position.coords.longitude;
+
+          // 현재 선택된 무더위쉼터의 인덱스 찾기
+          const currentIndex = markers.findIndex(marker => marker.selected);
+
+          // 다음으로 가까운 무더위쉼터 찾기
+          const nextShelter = findNextNearestShelterFromMarkers(currentLatitude, currentLongitude, currentIndex);
+
+          if (nextShelter) {
+
+            const currentLatitude = currentLocationMarker.getPosition().y;
+            const currentLongitude = currentLocationMarker.getPosition().x;
+
+            // 이전에 선택된 마커와 정보창 삭제
+            if (currentLocationMarker) {
+              currentLocationMarker.setMap(null);
+              currentLocationMarker = null;
+            }
+            if (currentLocationInfoWindow) {
+              currentLocationInfoWindow.close();
+              currentLocationInfoWindow = null;
+            }
+
+            // 선택된 무더위쉼터의 selected 속성 초기화
+            markers.forEach(marker => marker.selected = false);
+
+            // 선택된 무더위쉼터 표시
+            const infoWindowContent = `
+              <h3>사용자님의 위치에서 가장 가까운 무더위쉼터는</h3>
+              <p>${nextShelter.name}</p> <h3>입니다</h3>
+              <p>전화번호: ${nextShelter.phoneNumber}</p>
+              
+            `;
+            const infoWindow = new naver.maps.InfoWindow({ content: infoWindowContent });
+
+            const marker = new naver.maps.Marker({
+              position: new naver.maps.LatLng(nextShelter.latitude, nextShelter.longitude),
+              map: map
+            });
+
+            naver.maps.Event.addListener(marker, "click", function () {
+              infoWindow.open(map, marker);
+            });
+
+            marker.selected = true;
+
+            // 지도 이동 및 확대
+            map.setCenter(marker.position);
+            map.setZoom(17);
+          }
+        }, showError);
+      } else {
+        alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+      }
+    }
+        
     
     function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
