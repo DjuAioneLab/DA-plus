@@ -194,13 +194,7 @@
   </div>
 
     <script>
-  window.onload = function() {
-    var userLocationButton = document.getElementById('userLocationButton');
-    userLocationButton.style.position = "fixed";
-    userLocationButton.style.bottom = "20px";
-    userLocationButton.style.right = "20px";
-  }
-        
+  
         var map = new naver.maps.Map("map", {
         zoom: 6,
         center: new naver.maps.LatLng(36.2253017, 127.6460516),
@@ -373,6 +367,12 @@ var htmlMarker1 = {
     closeBtn.addEventListener('click', function() {
         sidebar.classList.remove('active');
     });
+          window.onload = function() {
+    var userLocationButton = document.getElementById('userLocationButton');
+    userLocationButton.style.position = "fixed";
+    userLocationButton.style.bottom = "20px";
+    userLocationButton.style.right = "20px";
+      }
     </script>
 </body>
 </html>
