@@ -174,7 +174,7 @@
             <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/contents/prevent/prevent09.html?menuSeq=126">지진 시 행동 요령</a></li>        
             <li><a href="https://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/ppn/emg/SDIJKM5602.html?menuSeq=596">비상연락망</a></li>
         <hr/>
-      <li><a href="https://github.com/J0HW/practice/blob/main/index.html">폭염</a></li>
+      <li><a href="https://djuaionelab.github.io/DA-plus/index.html">폭염</a></li>
       <li><a href="https://3hwangg.github.io/23opensw/floodmap2.html">홍수(지방하천)</a></li>
       <li><a href="https://3hwangg.github.io/23opensw/floodmap1.html">홍수(국가하천)</a></li>    
         </ul>
@@ -205,20 +205,7 @@
             style: naver.maps.ZoomControlStyle.SMALL
         }
     }),
-  var  markers = [];
-  var csvFiles = [
-            './eqk1.csv',
-            './eqk2.csv',
-            './eqk3.csv',
-            './eqk4.csv',
-            './eqk5.csv',
-            './eqk6.csv',
-            './eqk7.csv',
-            './eqk8.csv',
-            './eqk9.csv',
-            './eqk10.csv',
-            './eqk11.csv'
-    ];
+    markers = [];
 
 var htmlMarker1 = {
         content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(https://navermaps.github.io/maps.js.ncp/docs/img/cluster-marker-1.png);background-size:contain;"></div>',
@@ -246,47 +233,30 @@ var htmlMarker1 = {
         anchor: N.Point(20, 20)
     };
 
-   csvFiles.forEach(function (csvFile) {
-            fetch(csvFile)
-                .then(response => response.text())
-                .then(data => {
-                    var lines = data.split('\n');
-                    for (var i = 1; i < lines.length; i++) {
-                        var values = lines[i].split(',');
-                        var 위치명 = values[0];
-                        var 위도 = parseFloat(values[1]);
-                        var 경도 = parseFloat(values[2]);
-                        var locationLatLng = new naver.maps.LatLng(위도, 경도);
+    function onLoad() {
+        loadCSV('./eqk1.csv', function(data) {
+                        var lines = data.split('\n');
 
-                        var markerOptions = {
-                            position: locationLatLng,
-                            draggable: true,
-                            map: map,
-                            title: '이곳의 위치는 ' + 위치명 + ' 입니다.'
-                        };
-                        
-                        var marker = new naver.maps.Marker(markerOptions);
-                        markers.push(marker);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
-        
-        var markers = [];
-        var csvFiles = [
-            './eqk1.csv',
-            './eqk2.csv',
-            './eqk3.csv',
-            './eqk4.csv',
-            './eqk5.csv',
-            './eqk6.csv',
-            './eqk7.csv',
-            './eqk8.csv',
-            './eqk9.csv',
-            './eqk10.csv',
-            './eqk11.csv'
-        ];
-        
+                        for (var i = 1; i < lines.length; i++) {
+                            var values = lines[i].split(',');
+                            var 위치명 = values[0];
+                            var 위도 = parseFloat(values[1]);
+                            var 경도 = parseFloat(values[2]);
+                            var locationLatLng = new naver.maps.LatLng(위도, 경도);
+
+                            var markerOptions = {
+                                position: locationLatLng,
+                                draggable: true,
+                                map: map,
+                                content: '<div style="padding:5px;">' + 위치명 + '</div>'
+                            };
+
+                            var marker = new naver.maps.Marker(markerOptions);
+                            markers.push(marker);
+                        }
+                    });
+
+
         var markerClustering = new MarkerClustering({
             minClusterSize: 2,
             maxZoom: 12,
@@ -299,66 +269,6 @@ var htmlMarker1 = {
         });
     }
 
-         function findNextNearestShelter() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          const currentLatitude = position.coords.latitude;
-          const currentLongitude = position.coords.longitude;
-
-          // 현재 선택된 무더위쉼터의 인덱스 찾기
-          const currentIndex = markers.findIndex(marker => marker.selected);
-
-          // 다음으로 가까운 무더위쉼터 찾기
-          const nextShelter = findNextNearestShelterFromMarkers(currentLatitude, currentLongitude, currentIndex);
-
-          if (nextShelter) {
-
-            const currentLatitude = currentLocationMarker.getPosition().y;
-            const currentLongitude = currentLocationMarker.getPosition().x;
-
-            // 이전에 선택된 마커와 정보창 삭제
-            if (currentLocationMarker) {
-              currentLocationMarker.setMap(null);
-              currentLocationMarker = null;
-            }
-            if (currentLocationInfoWindow) {
-              currentLocationInfoWindow.close();
-              currentLocationInfoWindow = null;
-            }
-
-            // 선택된 무더위쉼터의 selected 속성 초기화
-            markers.forEach(marker => marker.selected = false);
-
-            // 선택된 무더위쉼터 표시
-            const infoWindowContent = `
-              <h3>사용자님의 위치에서 가장 가까운 무더위쉼터는</h3>
-              <p>${nextShelter.name}</p> <h3>입니다</h3>
-              <p>전화번호: ${nextShelter.phoneNumber}</p>
-              
-            `;
-            const infoWindow = new naver.maps.InfoWindow({ content: infoWindowContent });
-
-            const marker = new naver.maps.Marker({
-              position: new naver.maps.LatLng(nextShelter.latitude, nextShelter.longitude),
-              map: map
-            });
-
-            naver.maps.Event.addListener(marker, "click", function () {
-              infoWindow.open(map, marker);
-            });
-
-            marker.selected = true;
-
-            // 지도 이동 및 확대
-            map.setCenter(marker.position);
-            map.setZoom(17);
-          }
-        }, showError);
-      } else {
-        alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
-      }
-    }
-        
     
     function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
