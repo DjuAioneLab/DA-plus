@@ -255,6 +255,14 @@ var htmlMarker1 = {
                             markers.push(marker);
                         }
                     });
+        fetch('./eqk1.csv')
+ .then(response => response.text())
+ .then(data => {
+   markers = parseCSVData(data);
+   displayMarkers(markers);
+ })
+ .catch(error => console.error('Error:', error));
+        
         fetch('./eqk3.csv')
  .then(response => response.text())
  .then(data => {
