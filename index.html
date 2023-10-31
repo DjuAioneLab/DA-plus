@@ -291,7 +291,13 @@ var htmlMarker1 = {
             }
         }
       
-
+    var markerOptions = {
+    position: locationLatLng,
+    draggable: true,
+    map: map,
+    title: 위치명,
+    content: '<div style="padding:5px;">' + 위치명 + '</div>'
+    };
 
     var userLocationButton = document.getElementById('userLocationButton');
     userLocationButton.addEventListener('click', function()  {
