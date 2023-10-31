@@ -268,7 +268,23 @@ var htmlMarker1 = {
             indexGenerator: [10, 100, 200, 500, 1000],
         });
     }
+        const infoWindowContent = `
+              <h3>사용자님의 위치에서 가장 가까운 대피소는</h3>
+              <p>${nextShelter.name}</p> <h3>입니다</h3>              
+            `;
+            const infoWindow = new naver.maps.InfoWindow({ content: infoWindowContent });
 
+            const marker = new naver.maps.Marker({
+              position: new naver.maps.LatLng(nextShelter.latitude, nextShelter.longitude),
+              map: map
+            });
+
+            naver.maps.Event.addListener(marker, "click", function () {
+              infoWindow.open(map, marker);
+            });
+
+            marker.selected = true;
+        
     
     function setMapCenterToUserLocation() {
             if ('geolocation' in navigator) {
